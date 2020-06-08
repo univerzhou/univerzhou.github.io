@@ -70,14 +70,104 @@
       
 
       
-      <h1 id="JS基本概念系列–原型链和继承方式"><a href="#JS基本概念系列–原型链和继承方式" class="headerlink" title="JS基本概念系列–原型链和继承方式"></a>JS基本概念系列–原型链和继承方式</h1><hr>
-<h2 id="在js之中"><a href="#在js之中" class="headerlink" title="在js之中"></a>在js之中</h2>
+      <h1 id="JS基本概念系列–原型链和继承方式"><a href="#JS基本概念系列–原型链和继承方式" class="headerlink" title="JS基本概念系列–原型链和继承方式"></a>JS基本概念系列–原型链和继承方式</h1><h2 id="原型的概念"><a href="#原型的概念" class="headerlink" title="原型的概念"></a>原型的概念</h2><pre><code>在js之中，每个构造函数都拥有一个名为prototype属性，它指向此构造函数创立之初就被js赋予的该构造函数的原型(prototype)。而在该原型对象中存在一个名为constructor属性，指向它的构造函数。
+
+该构造函数的实例被创立时就会包含一个指针(内部属性)，指向**这个构造函数的原型**，在主流浏览器打印中一般用[[Prototype]],表示，但是不能直接访问。</code></pre><h2 id="原型链概念"><a href="#原型链概念" class="headerlink" title="原型链概念"></a>原型链概念</h2><pre><code>假设有这种情况：一个构造函数的实例调用一个函数，但是该实例没有，这时js就会从[[Prototype]]指向的对象去找，这就找到了该构造函数的原型。如果这个原型对象也包含指向另一个原型对象的指针，那么将会继续向上找寻，层层递进。这就是原型链。</code></pre><h2 id="继承方式"><a href="#继承方式" class="headerlink" title="继承方式"></a>继承方式</h2><pre><code>1. 原型链继承
+    通过原型链的原理继承超类型的原型上的方法。
+    (```)
+        function SuperType() {
+            this.property = true;
+        }
+        SuperType.prototype.getSuperValue = function() {
+            return this.property;
+        }
+        function SubType() {
+            this.subproterty = false;
+        }
+
+        //关键代码
+        SubType.prototype = new SuperType();            
+    (```)
+2. 借用构造函数
+    继承的是构造函数自身的属性
+    (```)
+        function SuperType() {
+            this.property = true;
+        }
+        SuperType.prototype.getSuperValue = function() {
+            return this.property;
+        }
+        function SubType() {
+            &lt;!-- 继承SuperType属性方法 --&gt;
+            SuperType.call(this);
+        }        
+    (```)
+3. 组合继承
+    通过结合原型链和构造函数的形式组合继承超类自身属性和构造函数的原型上的方法。
+    (```)
+        function SuperType() {
+            this.property = true;
+        }
+        SuperType.prototype.getSuperValue = function() {
+            return this.property;
+        }
+        function SubType() {
+            &lt;!-- 继承SuperType属性 --&gt;
+            SuperType.call(this);
+        }        
+        //继承SuperType的原型属性方法
+        SubType.prototype = new SuperType();
+    (```)
+4. 寄生继承
+    主要针对的是对象的继承，而不是自定义对象和构造函数
+
+    object.create的实现主要为：创建一个新的构造函数，把传入的参数对象赋值给该构造函数的原型，最后返回该构造函数的一个实例。下面以一个object函数实现
+    (```)
+        object(val) {
+            function F() {};
+            F.prototype = val;
+            return new F();
+        }
+    (```)
+    寄生继承：
+    (```)
+        function SuperType() {
+            this.property = true;
+        }
+        SuperType.prototype.getSuperValue = function() {
+            return this.property;
+        }
+        function SubType() {
+            this.subproterty = false;
+        }
+
+        //关键代码,实现寄生继承
+        SubType.prototype = object(SuperType.prototype);            
+    (```)
+5. 寄生组合继承
+    本质上是组合继承，只是把组合继承中的原型链方式由借用实例生成的方式变为寄生方式
+    (```)
+        function SuperType() {
+            this.property = true;
+        }
+        SuperType.prototype.getSuperValue = function() {
+            return this.property;
+        }
+        function SubType() {
+            &lt;!-- 继承SuperType属性 --&gt;
+            SuperType.call(this);
+            this.subproterty = false;
+        }
+
+        //关键代码,实现寄生继承
+        SubType.prototype = object(SuperType.prototype);            
+    (```)</code></pre>
       
       <!-- 打赏 -->
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/08/JSseries-prototype/" data-id="ckb6l7vj1000d9ou9du1wy7iu"
+      <a data-url="http://yoursite.com/2020/06/08/JSseries-prototype/" data-id="ckb6nco7u000dh4u9ffda7vh9"
         class="article-share-link">分享</a>
       
     </footer>
