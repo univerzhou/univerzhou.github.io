@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    categories |  UniverZH
+    JSseries-async |  UniverZH
   </title>
   
   <link rel="shortcut icon" href="/favicon.ico">
@@ -29,7 +29,7 @@
   <div id="app">
     <main class="content">
       <section class="outer">
-  <article id="page-" class="article article-type-page" itemscope
+  <article id="post-JSseries-async" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -37,7 +37,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  categories
+  JSseries-async
 </h1>
   
 
@@ -45,6 +45,21 @@
     
 
     
+    <div class="article-meta">
+      <a href="/2020/06/16/JSseries-async/" class="article-date">
+  <time datetime="2020-06-16T14:40:08.000Z" itemprop="datePublished">2020-06-16</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+    <div class="tocbot"></div>
+
+
+
+
 
     
 
@@ -55,13 +70,20 @@
       
 
       
-      
+      <h1 id="JS基本概念系列–Js的异步机制"><a href="#JS基本概念系列–Js的异步机制" class="headerlink" title="JS基本概念系列–Js的异步机制"></a>JS基本概念系列–Js的异步机制</h1><h2 id="js在浏览器中的运行机制"><a href="#js在浏览器中的运行机制" class="headerlink" title="js在浏览器中的运行机制"></a>js在浏览器中的运行机制</h2><p>  js一般运行在浏览器中，而浏览器有多个常驻线程：<br>  1.渲染引擎线程<br>  2.js引擎线程<br>  3.异步http请求线程<br>  4.事件触发线程<br>  5.定时器触发线程<br>  由于js是运行在js引擎线程之上，而且在js引擎线程运行的时候，渲染引擎线程是被挂起的。因为js引擎线程是可以直接操作DOM的，而如果在渲染引擎线程工作的时候js引擎操作DOM，就会造成DOM混乱，所以这两者某个时间只能运行一个，另一个就要被挂起。</p>
+<h2 id="同步任务、异步任务"><a href="#同步任务、异步任务" class="headerlink" title="同步任务、异步任务"></a>同步任务、异步任务</h2><p>  同步任务：如果这个函数返回的值，能够立刻被得到或者预测到。<br>  <strong>如果是同步函数，即使函数运行比较耗时，还是会等待到执行完毕</strong></p>
+<p>  异步任务：函数返回时，调用者不能立刻得到结果，必须通过一些手段得到。</p>
+<h2 id="事件循环-Event-Loop"><a href="#事件循环-Event-Loop" class="headerlink" title="事件循环(Event Loop)"></a>事件循环(Event Loop)</h2><p>  js在浏览器运行时，主要有几部分。一个是执行同步任务的主线程–执行栈，还有消息队列。其中异步任务又可细分为宏任务和微任务。这两者分别存储在对应的异步任务队列里面。<br>  宏任务：settimeout、setinternal、整段js代码、io操作、dom操作<br>  微任务：promise、process.nextTick</p>
+<p>  具体执行过程大致为：首先当执行一段代码时，就相当于开始执行一个异步任务(该任务为一整段js代码)，在执行的过程中，如果遇到同步代码段，会直接放到执行栈中执行。而如果遇到异步任务，则会新开对应的线程执行该异步任务(见上文的浏览器线程)可直接执行的部分。同时把执行状态和回调函数放到对应的消息队列中，当这段代码执行完后，主线程会去查看异步任务队列，如果微任务队列有任务，则把微任务队列清空(<strong>这也是为什么微任务能插队宏任务的原因</strong>)。清空之后，继续执行下一个异步宏任务。可以说，宏任务和微任务执行关系是：每执行一个宏任务就要清空微任务队列。</p>
+<p>  <img src="https://user-gold-cdn.xitu.io/2018/1/26/161314dcb17a84ad?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt title="执行示例"></p>
+<p><a href="https://juejin.im/post/5a6ad46ef265da3e513352c8" target="_blank" rel="noopener">参考引用:</a></p>
+
       
       <!-- 打赏 -->
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/categories/index.html" data-id="ckbi3m1940000fcu9faa598d6"
+      <a data-url="http://yoursite.com/2020/06/16/JSseries-async/" data-id="ckbi3m19z000ffcu9dgcfp1ad"
         class="article-share-link">分享</a>
       
     </footer>
@@ -70,6 +92,16 @@
 
   
   
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/06/10/JSseries-Econtext/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">JSseries-Econtext</div>
+      </a>
+    
+  </nav>
+
 
   
 
@@ -128,6 +160,8 @@
   
 
   
+  
+  
 
 </article>
 </section>
@@ -173,8 +207,8 @@
       </div>
     </main>
     
-      <aside class="sidebar">
-        
+    <aside class="sidebar">
+      
         <button class="navbar-toggle"></button>
 <nav class="navbar">
   
@@ -262,6 +296,21 @@
   <script src="/fancybox/jquery.fancybox.min.js"></script>
 
 
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
 
 
 <script>
