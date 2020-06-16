@@ -70,7 +70,9 @@
       
 
       
-      <h1 id="JS基本概念系列–Js的异步机制"><a href="#JS基本概念系列–Js的异步机制" class="headerlink" title="JS基本概念系列–Js的异步机制"></a>JS基本概念系列–Js的异步机制</h1><h2 id="js在浏览器中的运行机制"><a href="#js在浏览器中的运行机制" class="headerlink" title="js在浏览器中的运行机制"></a>js在浏览器中的运行机制</h2><p>  js一般运行在浏览器中，而浏览器有多个常驻线程：<br>  1.渲染引擎线程<br>  2.js引擎线程<br>  3.异步http请求线程<br>  4.事件触发线程<br>  5.定时器触发线程<br>  由于js是运行在js引擎线程之上，而且在js引擎线程运行的时候，渲染引擎线程是被挂起的。因为js引擎线程是可以直接操作DOM的，而如果在渲染引擎线程工作的时候js引擎操作DOM，就会造成DOM混乱，所以这两者某个时间只能运行一个，另一个就要被挂起。</p>
+      <h1 id="JS基本概念系列–Js的异步机制"><a href="#JS基本概念系列–Js的异步机制" class="headerlink" title="JS基本概念系列–Js的异步机制"></a>JS基本概念系列–Js的异步机制</h1><h2 id="js在浏览器中的运行机制"><a href="#js在浏览器中的运行机制" class="headerlink" title="js在浏览器中的运行机制"></a>js在浏览器中的运行机制</h2><p>  js一般运行在浏览器中，而浏览器有多个常驻线程：<br>  1.渲染引擎线程<br>  2.js引擎线程<br>  3.异步http请求线程</p>
+<a id="more"></a>  
+<p>  4.事件触发线程<br>  5.定时器触发线程<br>  由于js是运行在js引擎线程之上，而且在js引擎线程运行的时候，渲染引擎线程是被挂起的。因为js引擎线程是可以直接操作DOM的，而如果在渲染引擎线程工作的时候js引擎操作DOM，就会造成DOM混乱，所以这两者某个时间只能运行一个，另一个就要被挂起。</p>
 <h2 id="同步任务、异步任务"><a href="#同步任务、异步任务" class="headerlink" title="同步任务、异步任务"></a>同步任务、异步任务</h2><p>  同步任务：如果这个函数返回的值，能够立刻被得到或者预测到。<br>  <strong>如果是同步函数，即使函数运行比较耗时，还是会等待到执行完毕</strong></p>
 <p>  异步任务：函数返回时，调用者不能立刻得到结果，必须通过一些手段得到。</p>
 <h2 id="事件循环-Event-Loop"><a href="#事件循环-Event-Loop" class="headerlink" title="事件循环(Event Loop)"></a>事件循环(Event Loop)</h2><p>  js在浏览器运行时，主要有几部分。一个是执行同步任务的主线程–执行栈，还有消息队列。其中异步任务又可细分为宏任务和微任务。这两者分别存储在对应的异步任务队列里面。<br>  宏任务：settimeout、setinternal、整段js代码、io操作、dom操作<br>  微任务：promise、process.nextTick</p>
@@ -83,7 +85,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/16/JSseries-async/" data-id="ckbi3m19z000ffcu9dgcfp1ad"
+      <a data-url="http://yoursite.com/2020/06/16/JSseries-async/" data-id="ckbi3pf5k0006zku96cotq2wr"
         class="article-share-link">分享</a>
       
     </footer>
