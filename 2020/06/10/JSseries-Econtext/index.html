@@ -70,9 +70,8 @@
       
 
       
-      <h1 id="JS基本概念系列–作用域"><a href="#JS基本概念系列–作用域" class="headerlink" title="JS基本概念系列–作用域"></a>JS基本概念系列–作用域</h1><a id="more"></a>
-
-<h2 id="作用域的原理和介绍"><a href="#作用域的原理和介绍" class="headerlink" title="作用域的原理和介绍"></a>作用域的原理和介绍</h2><p>执行环境(Execution Context)是JavaScript中最为重要的概念，一般当进入一段代码或者一个函数中时，就标志着进入了某个执行环境。而且每个执行环境都包含有一个变量对象(variable object),该执行环境中的所有对象和函数都被囊括在里面。</p>
+      <h1 id="JS基本概念系列–作用域"><a href="#JS基本概念系列–作用域" class="headerlink" title="JS基本概念系列–作用域"></a>JS基本概念系列–作用域</h1><h2 id="作用域的原理和介绍"><a href="#作用域的原理和介绍" class="headerlink" title="作用域的原理和介绍"></a>作用域的原理和介绍</h2><p>执行环境(Execution Context)是JavaScript中最为重要的概念，一般当进入一段代码或者一个函数中时，就标志着进入了某个执行环境。而且每个执行环境都包含有一个变量对象(variable object),该执行环境中的所有对象和函数都被囊括在里面。</p>
+<a id="more"></a>
 <p>每个函数也有着自己的执行环境，随着函数的调用，该函数的执行环境会被推入一个环境栈之中，当该函数被调用完毕，环境栈就会把它推出来，这个时候这个执行环境就会被销毁。函数的执行环境中把活动对象(activity object)当做变量对象。</p>
 <p>在一个被执行的执行环境中，变量对象存在一条作用域链(scope chain),当前的变量对象始终是该条作用域链的起点。同时作用域链只允许从当前执行环境向父执行环境搜索，直至到全局变量，不允许反向。这也是闭包能实现的原理之一。</p>
 <p>浏览器中，会把全局的执行环境视为Windows对象。当某个环境被销毁时，其内的变量对象也会被销毁。全局执行环境中的变量对象始终是作用域链的终点。</p>
@@ -84,7 +83,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/10/JSseries-Econtext/" data-id="ckbi3pf580000zku9gip87dnz"
+      <a data-url="http://yoursite.com/2020/06/10/JSseries-Econtext/" data-id="ckbkxjvgw00053ou9328l8dm9"
         class="article-share-link">分享</a>
       
     </footer>
