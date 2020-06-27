@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+   
+  <meta name="keywords" content="js,css,html,cs6,node.js">
+   
+  <meta name="description" content="用于分享，记录自己学习内容，炫酷的前端特效。">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    vueSoundCode-keepalive |  UniverZH
+  </title>
+  
+  <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">  <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">  <script src="/js/pace.min.js"></script>
+
+  
+
+  
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    <main class="content">
+      <section class="outer">
+  <article id="post-vueSoundCode-keepalive" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  vueSoundCode-keepalive
+</h1>
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2020/06/27/vueSoundCode-keepalive/" class="article-date">
+  <time datetime="2020-06-27T07:57:07.000Z" itemprop="datePublished">2020-06-27</time>
+</a>
+      
+    </div>
+    
+
+    
+    
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      <h1 id="vue源码解读系列-keepalive"><a href="#vue源码解读系列-keepalive" class="headerlink" title="vue源码解读系列-keepalive"></a>vue源码解读系列-keepalive</h1><h2 id="keepalive基本用法"><a href="#keepalive基本用法" class="headerlink" title="keepalive基本用法"></a>keepalive基本用法</h2><p>  <keep-alive> 包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们。和 <transition> 相似，<keep-alive> 是一个抽象组件：它自身不会渲染一个 DOM 元素，也不会出现在父组件链中。</keep-alive></transition></keep-alive></p>
+<p>  当组件在 <keep-alive> 内被切换，它的 <code>activated</code> 和 <code>deactivated</code> 这两个生命周期钩子函数将会被对应执行。</keep-alive></p>
+<a id="more"></a>
+  <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 基本 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">keep-alive</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">component</span> <span class="attr">:is</span>=<span class="string">"view"</span>&gt;</span><span class="tag">&lt;/<span class="name">component</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">keep-alive</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 多个条件判断的子组件 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">keep-alive</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">comp-a</span> <span class="attr">v-if</span>=<span class="string">"a &gt; 1"</span>&gt;</span><span class="tag">&lt;/<span class="name">comp-a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">comp-b</span> <span class="attr">v-else</span>&gt;</span><span class="tag">&lt;/<span class="name">comp-b</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">keep-alive</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 和 `&lt;transition&gt;` 一起使用 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">transition</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">keep-alive</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">component</span> <span class="attr">:is</span>=<span class="string">"view"</span>&gt;</span><span class="tag">&lt;/<span class="name">component</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">keep-alive</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">transition</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>  注意，<keep-alive> 是用在其一个直属的子组件被开关的情形。如果你在其中有 <code>v-for</code> 则不会工作。如果有上述的多个条件性的子元素，<keep-alive> 要求同时只有<strong>一个子元素</strong>被渲染。</keep-alive></keep-alive></p>
+<p>  keepalive在函数式组件中不起作用，因为keepalive没有vue实例。</p>
+<h2 id="keepalive源码详细解析"><a href="#keepalive源码详细解析" class="headerlink" title="keepalive源码详细解析"></a>keepalive源码详细解析</h2><h3 id="keepalive辅助函数"><a href="#keepalive辅助函数" class="headerlink" title="keepalive辅助函数"></a>keepalive辅助函数</h3><p>  matches: 判断输入的参数是否匹配,可以是数组或是字符串亦或是正则表达式</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">matches</span> (<span class="params">pattern: <span class="built_in">string</span> | <span class="built_in">RegExp</span> | <span class="built_in">Array</span>&lt;<span class="built_in">string</span>&gt;, name: <span class="built_in">string</span></span>): <span class="title">boolean</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(pattern)) &#123;</span><br><span class="line">        <span class="keyword">return</span> pattern.indexOf(name) &gt; <span class="number">-1</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> pattern === <span class="string">'string'</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> pattern.split(<span class="string">','</span>).indexOf(name) &gt; <span class="number">-1</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isRegExp(pattern)) &#123;</span><br><span class="line">        <span class="keyword">return</span> pattern.test(name)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* istanbul ignore next */</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>  pruneCache: 删除具体keepalive实例的缓存，声明一个对象，解构获取keepalive实例中的cache对象，keys数组和虚拟节点。遍历cache，对每一个满足名称对应和过滤条件的cache项执行pruneCacheEntry函数。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pruneCache</span> (<span class="params">keepAliveInstance: <span class="built_in">any</span>, filter: <span class="built_in">Function</span></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// keepAliveInstance keepAlive实例</span></span><br><span class="line">    <span class="keyword">const</span> &#123; cache, keys, _vnode &#125; = keepAliveInstance</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> cache) &#123;</span><br><span class="line">        <span class="keyword">const</span> cachedNode: ?VNode = cache[key]</span><br><span class="line">        <span class="keyword">if</span> (cachedNode) &#123;</span><br><span class="line">        <span class="keyword">const</span> name: ?<span class="built_in">string</span> = getComponentNam(cachedNode.componentOptions)</span><br><span class="line">        <span class="keyword">if</span> (name &amp;&amp; !filter(name)) &#123;</span><br><span class="line">            pruneCacheEntry(cache, key, keys, _vnode)</span><br><span class="line">        &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  pruneCacheEntry: 查找要删除的cache实例，判断其是否存在且不等于当前虚拟节点，满足条件就置空该cache对象中的对应项，同步删除keys数组中的key。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function pruneCacheEntry (</span><br><span class="line"><span class="keyword">cache</span>: VNodeCache,</span><br><span class="line"><span class="keyword">key</span>: <span class="keyword">string</span>,</span><br><span class="line"><span class="keyword">keys</span>: <span class="built_in">Array</span>&lt;<span class="keyword">string</span>&gt;,</span><br><span class="line"><span class="keyword">current</span>?: VNode</span><br><span class="line">) &#123;</span><br><span class="line">    const cached = <span class="keyword">cache</span>[<span class="keyword">key</span>]</span><br><span class="line">    <span class="keyword">if</span> (cached &amp;&amp; cached !== <span class="keyword">current</span>) &#123;</span><br><span class="line">        cached.componentInstance.$destroy()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">cache</span>[<span class="keyword">key</span>] = <span class="literal">null</span></span><br><span class="line">    remove(<span class="keyword">keys</span>, <span class="keyword">key</span>) //删除该实例<span class="keyword">keys</span>数组中的对应项</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="keepailve主体部分"><a href="#keepailve主体部分" class="headerlink" title="keepailve主体部分"></a>keepailve主体部分</h3><p>  <strong><em>abstract：true</em></strong>这行代码声明了keepalive的abstract属性为true，则vue在渲染的时候不会把keepalive缓存的cache渲染到真实DOM上。</p>
+<p>  <code>props</code>:<br>    接收三个props参数，分别为include，exclude，max。其中include，exclude类型可为字符串，正则和数组。max可为字符串或者num类型。</p>
+<p>  <code>created()</code>:<br>    声明一个cache对象，keys数组</p>
+<p>  <code>destroyed ()</code>:<br>    遍历cache，对其中每个属性执行pruneCacheEntry()。</p>
+<p>  <code>watch</code>:<br>    监听include和exclude，当它俩值发生变化的时候执行pruneCache()，动态进行缓存或者删除操作。</p>
+<p>  <code>render ()</code>:<br>    获取当前keepalive下的默认子组件节点，判断获取到的vnode是否是一个组件，满足就执行下列操作:<br>    1. 获取组件的名字<br>    2. 满足组件设置name，且不在include，或者在exclude中时，直接返回该vnode<br>    3. 判断当前的vnode是否已被缓存，如果已被缓存则更新该缓存实例。如果没有则存入该vnode，同时若是存入的vnode超出了max限制，则会依据LRU缓存策略把最老的队尾vnode剔除。<br>    4. 设置该vnode的keepalive属性为true。最后把该vnode返回</p>
+<pre><code>ps:LRU缓存策略一般通过链表实现，每被调用就会把该元素插入到队头，当满了时候就会把队尾的元素删除。</code></pre><p>  全部代码:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* @flow */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; isRegExp, remove &#125; <span class="keyword">from</span> <span class="string">'shared/util'</span></span><br><span class="line"><span class="keyword">import</span> &#123; getFirstComponentChild &#125; <span class="keyword">from</span> <span class="string">'core/vdom/helpers/index'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ts写法，声明一个虚拟节点缓存对象</span></span><br><span class="line"><span class="keyword">type</span> VNodeCache = &#123; [key: <span class="built_in">string</span>]: ?VNode &#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getComponentName</span> (<span class="params">opts: ?VNodeComponentOptions</span>): ?<span class="title">string</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> opts &amp;&amp; (opts.Ctor.options.name || opts.tag)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 判断输入的参数是否匹配数组或是字符串亦或是正则表达式</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">matches</span> (<span class="params">pattern: <span class="built_in">string</span> | <span class="built_in">RegExp</span> | <span class="built_in">Array</span>&lt;<span class="built_in">string</span>&gt;, name: <span class="built_in">string</span></span>): <span class="title">boolean</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(pattern)) &#123;</span><br><span class="line">    <span class="keyword">return</span> pattern.indexOf(name) &gt; <span class="number">-1</span></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> pattern === <span class="string">'string'</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> pattern.split(<span class="string">','</span>).indexOf(name) &gt; <span class="number">-1</span></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isRegExp(pattern)) &#123;</span><br><span class="line">    <span class="keyword">return</span> pattern.test(name)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* istanbul ignore next */</span></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 删除具体keepalive实例的缓存，</span></span><br><span class="line"><span class="comment">// 声明一个对象，获取keepalive实例中的cache数组，keys数组和虚拟节点</span></span><br><span class="line"><span class="comment">// 遍历cache，对每一个满足名称对应和过滤条件的cache项执行pruneCacheEntry函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pruneCache</span> (<span class="params">keepAliveInstance: <span class="built_in">any</span>, filter: <span class="built_in">Function</span></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// keepAliveInstance keepAlive实例</span></span><br><span class="line">  <span class="keyword">const</span> &#123; cache, keys, _vnode &#125; = keepAliveInstance</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> cache) &#123;</span><br><span class="line">    <span class="keyword">const</span> cachedNode: ?VNode = cache[key]</span><br><span class="line">    <span class="keyword">if</span> (cachedNode) &#123;</span><br><span class="line">      <span class="keyword">const</span> name: ?<span class="built_in">string</span> = getComponentName(cachedNode.componentOptions)</span><br><span class="line">      <span class="keyword">if</span> (name &amp;&amp; !filter(name)) &#123;</span><br><span class="line">        pruneCacheEntry(cache, key, keys, _vnode)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">  取出要删除的cache对象，判断其是否存在且不等于当前虚拟节点，</span></span><br><span class="line"><span class="comment">  满足条件就置空该cache对象中的对应项，同步删除keys数组中的key</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pruneCacheEntry</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  cache: VNodeCache,</span></span></span><br><span class="line"><span class="function"><span class="params">  key: <span class="built_in">string</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">  keys: <span class="built_in">Array</span>&lt;<span class="built_in">string</span>&gt;,</span></span></span><br><span class="line"><span class="function"><span class="params">  current?: VNode</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> cached = cache[key]</span><br><span class="line">  <span class="keyword">if</span> (cached &amp;&amp; cached !== current) &#123;</span><br><span class="line">    cached.componentInstance.$destroy()</span><br><span class="line">  &#125;</span><br><span class="line">  cache[key] = <span class="literal">null</span></span><br><span class="line">  remove(keys, key) <span class="comment">//删除该实例keys数组中的对应项</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> patternTypes: <span class="built_in">Array</span>&lt;<span class="built_in">Function</span>&gt; = [<span class="built_in">String</span>, <span class="built_in">RegExp</span>, <span class="built_in">Array</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 导出一个对象</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="string">'keep-alive'</span>,</span><br><span class="line">  <span class="keyword">abstract</span>: <span class="literal">true</span>, <span class="comment">// 不会真正渲染到dom上</span></span><br><span class="line"></span><br><span class="line">  props: &#123;</span><br><span class="line">    include: patternTypes,</span><br><span class="line">    exclude: patternTypes,</span><br><span class="line">    max: [<span class="built_in">String</span>, <span class="built_in">Number</span>]</span><br><span class="line">  &#125;,</span><br><span class="line"><span class="comment">// 声明一个缓存对象和一个key数组</span></span><br><span class="line">  created () &#123;</span><br><span class="line">    <span class="keyword">this</span>.cache = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line">    <span class="keyword">this</span>.keys = []</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  destroyed () &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> <span class="keyword">this</span>.cache) &#123;</span><br><span class="line">      pruneCacheEntry(<span class="keyword">this</span>.cache, key, <span class="keyword">this</span>.keys)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  watch: &#123;</span><br><span class="line">    <span class="comment">// 这里的this指的是使用keepalive的vue实例，</span></span><br><span class="line">    <span class="comment">// </span></span><br><span class="line">    include (val: <span class="built_in">string</span> | <span class="built_in">RegExp</span> | <span class="built_in">Array</span>&lt;<span class="built_in">string</span>&gt;) &#123;</span><br><span class="line">      pruneCache(<span class="keyword">this</span>, <span class="function"><span class="params">name</span> =&gt;</span> matches(val, name))</span><br><span class="line">    &#125;,</span><br><span class="line">    exclude (val: <span class="built_in">string</span> | <span class="built_in">RegExp</span> | <span class="built_in">Array</span>&lt;<span class="built_in">string</span>&gt;) &#123;</span><br><span class="line">      pruneCache(<span class="keyword">this</span>, <span class="function"><span class="params">name</span> =&gt;</span> !matches(val, name))</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="keyword">const</span> vnode: VNode = getFirstComponentChild(<span class="keyword">this</span>.$slots.default)</span><br><span class="line">    <span class="comment">// 判断vnode是否为一个组件</span></span><br><span class="line">    <span class="keyword">const</span> componentOptions: ?VNodeComponentOptions = vnode &amp;&amp; vnode.componentOptions</span><br><span class="line">    <span class="keyword">if</span> (componentOptions) &#123;</span><br><span class="line">      <span class="comment">// check pattern</span></span><br><span class="line">      <span class="keyword">const</span> name: ?<span class="built_in">string</span> = getComponentName(componentOptions)</span><br><span class="line">      <span class="comment">/* </span></span><br><span class="line"><span class="comment">        组件声明了name,且如果是include属性中的则应为未保存过的，</span></span><br><span class="line"><span class="comment">        若是exclude属性中的，且匹配不上，则返回节点。</span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">      <span class="keyword">if</span> (name &amp;&amp; (</span><br><span class="line">        (<span class="keyword">this</span>.include &amp;&amp; !matches(<span class="keyword">this</span>.include, name)) ||</span><br><span class="line">        (<span class="keyword">this</span>.exclude &amp;&amp; matches(<span class="keyword">this</span>.exclude, name))</span><br><span class="line">      )) &#123;</span><br><span class="line">        <span class="keyword">return</span> vnode</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> &#123; cache, keys &#125; = <span class="keyword">this</span></span><br><span class="line">      <span class="keyword">const</span> key: ?<span class="built_in">string</span> = vnode.key == <span class="literal">null</span></span><br><span class="line">        <span class="comment">// same constructor may get registered as different local components</span></span><br><span class="line">        <span class="comment">// so cid alone is not enough (#3269)</span></span><br><span class="line">        ? componentOptions.Ctor.cid + (componentOptions.tag ? <span class="string">`::<span class="subst">$&#123;componentOptions.tag&#125;</span>`</span> : <span class="string">''</span>)</span><br><span class="line">        : vnode.key</span><br><span class="line">      <span class="keyword">if</span> (cache[key]) &#123;</span><br><span class="line">        vnode.componentInstance = cache[key].componentInstance</span><br><span class="line">        <span class="comment">// make current key freshest</span></span><br><span class="line">        remove(keys, key)</span><br><span class="line">        keys.push(key)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        cache[key] = vnode</span><br><span class="line">        keys.push(key)</span><br><span class="line">        <span class="comment">// prune oldest entry</span></span><br><span class="line">        <span class="comment">// 清理掉最老的缓存，涉及LRU缓存策略</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.max &amp;&amp; keys.length &gt; <span class="built_in">parseInt</span>(<span class="keyword">this</span>.max)) &#123;</span><br><span class="line">          pruneCacheEntry(cache, keys[<span class="number">0</span>], keys, <span class="keyword">this</span>._vnode)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      vnode.data.keepAlive = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> vnode   <span class="comment">// 返回一个虚拟节点</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+      <!-- 打赏 -->
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/06/27/vueSoundCode-keepalive/" data-id="ckbxgd7mt0007g0u9s6kcq4cr"
+        class="article-share-link">分享</a>
+      
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/06/18/vueSoundCode-nextTick/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">vueSoundCode-nextTick</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+  
+<!-- valine评论 -->
+<div id="vcomments-box">
+    <div id="vcomments">
+    </div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        notify: false,
+        verify: false,
+        app_id: '',
+        app_key: '',
+        path: window.location.pathname,
+        avatar: 'mp',
+        placeholder: '给我的文章加点评论吧~',
+        recordIP: true
+    });
+    const infoEle = document.querySelector('#vcomments .info');
+    if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+        infoEle.childNodes.forEach(function (item) {
+            item.parentNode.removeChild(item);
+        });
+    }
+</script>
+<style>
+    #vcomments-box {
+        padding: 5px 30px;
+    }
+
+    @media screen and (max-width: 800px) {
+        #vcomments-box {
+            padding: 5px 0px;
+        }
+    }
+
+    #vcomments-box #vcomments {
+        background-color: #fff;
+    }
+
+    .v .vlist .vcard .vh {
+        padding-right: 20px;
+    }
+
+    .v .vlist .vcard {
+        padding-left: 10px;
+    }
+</style>
+
+  
+
+  
+  
+  
+
+</article>
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul class="list-inline">
+      <li>
+        &copy;
+        2019-2020
+        UniverZH
+      </li>
+      <li>
+        
+        
+        
+        <a href="https://hexo.io" target="_blank">Hexo</a> Theme <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a> by shenyu
+        
+      </li>
+    </ul>
+    <ul class="list-inline">
+      <li>
+        
+        
+        <ul class="list-inline">
+  <li>PV:<span id="busuanzi_value_page_pv"></span></li>
+  <li>UV:<span id="busuanzi_value_site_uv"></span></li>
+</ul>
+        
+      </li>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+    <div class="to_top">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+      </div>
+    </main>
+    
+    <aside class="sidebar">
+      
+        <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="UniverZH"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">目录</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/learn/">学习</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">分享</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+      </aside>
+      <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+      <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script>
+  var ayerConfig = {
+    mathjax: false
+  }
+</script>
+
+<script src="/js/ayer.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+
+
+
+<script type="text/javascript" src="https://js.users.51.la/20544303.js"></script>
+  
+  
+  </div>
+</body>
+
+</html>
