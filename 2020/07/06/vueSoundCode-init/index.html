@@ -104,13 +104,14 @@
 <figure class="highlight irpf90"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span></span> initProvide (vm) &#123;</span><br><span class="line">  var <span class="keyword">provide</span> = vm.$options.<span class="keyword">provide</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">provide</span>) &#123;</span><br><span class="line">    vm._provided = typeof <span class="keyword">provide</span> === <span class="string">'function'</span></span><br><span class="line">      ? <span class="keyword">provide</span>.<span class="keyword">call</span>(vm)</span><br><span class="line">      : <span class="keyword">provide</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="callHook-vm-‘created’"><a href="#callHook-vm-‘created’" class="headerlink" title="callHook(vm, ‘created’)"></a>callHook(vm, ‘created’)</h3><p>  同上面callHook(vm, ‘beforeCreate’)。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>  可见，依据上边对源码的分析，可以清楚地看到_init()函数在初始化的时候做了许多工作，父实例继承，生命周期、data等初始化和挂载el模板。</p>
 
       
       <!-- 打赏 -->
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/07/06/vueSoundCode-init/" data-id="ckcakjamx0008qsu9mpdcfz20"
+      <a data-url="http://yoursite.com/2020/07/06/vueSoundCode-init/" data-id="ckcakpb6t0008lgu9mxbdoptr"
         class="article-share-link">分享</a>
       
     </footer>
