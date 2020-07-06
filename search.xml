@@ -1,6 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>vueSoundCode-_init</title>
+    <url>/2020/07/06/vueSoundCode-init/</url>
+    <content><![CDATA[<h1 id="vue源码解读系列-init函数"><a href="#vue源码解读系列-init函数" class="headerlink" title="vue源码解读系列-_init函数"></a>vue源码解读系列-_init函数</h1><p>  vue原型对象上的_init函数是vue的核心函数之一，它承担着创建一个新的vue实例的作用。<br>  那么当vue执行_init函数时主要执行了那些操作？下面尝试从其源码中找到答案。</p>
+<a id="more"></a>
+
+<h2 id="initMixin函数"><a href="#initMixin函数" class="headerlink" title="initMixin函数"></a>initMixin函数</h2><p>  这个函数主要做了一件事，就是给vue原型对象定义了一个_init函数，而_init函数只接收一个选项参数options。_init函数主要做了以下事情:<br>  1.标记开始tag、<br>  2.判断当前实例是否是组件，如果是则初始化内部组件，若不是，则把构造器选项对象和当前实例选项对象合并、<br>  3.<strong>依序</strong>执行一系列初始化操作:初始化生命周期、事件、render函数、回调 beforeCreate钩子、injections、state、provide、回调 created钩子<br>  4.若存在el模板，就挂载模板</p>
+<p>  initMixin函数源码如下:<br>  (```)<br>  function initMixin (Vue) {<br>  Vue.prototype._init = function (options) {<br>    var vm = this;<br>    // a uid<br>    vm._uid = uid$1++;</p>
+<pre><code>var startTag, endTag;
+/* istanbul ignore if */
+if (&quot;development&quot; !== &apos;production&apos; &amp;&amp; config.performance &amp;&amp; mark) {
+  startTag = &quot;vue-perf-start:&quot; + (vm._uid);
+  endTag = &quot;vue-perf-end:&quot; + (vm._uid);
+  mark(startTag);
+}
+
+// a flag to avoid this being observed
+vm._isVue = true;
+// merge options
+// 判断是否是组件
+if (options &amp;&amp; options._isComponent) {
+  // optimize internal component instantiation
+  // since dynamic options merging is pretty slow, and none of the
+  // internal component options needs special treatment.
+  /* 优化内部组件实例，因为动态组件非常慢，内部组件实例不需要特殊处理。*/
+
+  &lt;!--初始化内部组件 把组件中的诸如parent，props，_parentListeners等赋值给当前的实例 --&gt;
+  initInternalComponent(vm, options);
+} else {
+  vm.$options = mergeOptions(
+    &lt;!--   返回一个构造器options对象，如果有父构造器且发生了改变则更新继承。其中对后期修改/附加的选项，
+    extend选项都有更新。 --&gt;
+    resolveConstructorOptions(vm.constructor),
+    options || {},
+    vm
+  );
+}
+/* istanbul ignore else */
+{
+  initProxy(vm);
+}
+// expose real self
+vm._self = vm;
+// 初始化生命周期
+initLifecycle(vm);
+// 初始化事件
+initEvents(vm);
+// 初始化render函数
+initRender(vm);
+// 回调 beforeCreate钩子
+callHook(vm, &apos;beforeCreate&apos;);
+// 在初始化data或者props前解析injections
+initInjections(vm); // resolve injections before data/props
+// 初始化state
+initState(vm);
+// 在data/props之后解析provide
+initProvide(vm); // resolve provide after data/props
+// 回调 created钩子
+callHook(vm, &apos;created&apos;);
+
+/* istanbul ignore if */
+if (&quot;development&quot; !== &apos;production&apos; &amp;&amp; config.performance &amp;&amp; mark) {
+  vm._name = formatComponentName(vm, false);
+  mark(endTag);
+  measure((&quot;vue &quot; + (vm._name) + &quot; init&quot;), startTag, endTag);
+}
+/* 如果存在el模板，就挂载模板 */
+if (vm.$options.el) {
+  vm.$mount(vm.$options.el);
+}</code></pre><p>  };<br>}<br>  (```)</p>
+<hr>
+<p>  <strong><em>重要功能函数</em></strong></p>
+<h3 id="initLifecycle-vm"><a href="#initLifecycle-vm" class="headerlink" title="initLifecycle(vm)"></a>initLifecycle(vm)</h3><p>  初始化生命周期，向上寻找第一个满足abstract为真且存在其parent的父实例，同时声明一些变量。代码如下:<br>(```)<br>    function initLifecycle (vm) {<br>    var options = vm.$options;</p>
+<pre><code>// locate first non-abstract parent
+// 定位vm最近一个parent
+var parent = options.parent;
+// parent存在且VM自身也是非抽象的，一直向上追溯到parent的abstract为真且存在其parent，这时把它的parent
+// 当做vm的parent。并在其$children中存入vm
+if (parent &amp;&amp; !options.abstract) {
+    while (parent.$options.abstract &amp;&amp; parent.$parent) {
+    parent = parent.$parent;
+    }
+    parent.$children.push(vm);
+}
+/* 声明一些必须变量 */
+vm.$parent = parent;
+vm.$root = parent ? parent.$root : vm;
+
+vm.$children = [];
+vm.$refs = {};
+
+vm._watcher = null;
+vm._inactive = null;
+vm._directInactive = false;
+vm._isMounted = false;
+vm._isDestroyed = false;
+vm._isBeingDestroyed = false;
+}</code></pre><p>(```)</p>
+<h3 id="initEvents-vm"><a href="#initEvents-vm" class="headerlink" title="initEvents(vm)"></a>initEvents(vm)</h3><h3 id="initRender-vm"><a href="#initRender-vm" class="headerlink" title="initRender(vm)"></a>initRender(vm)</h3><h3 id="callHook-vm-‘beforeCreate’"><a href="#callHook-vm-‘beforeCreate’" class="headerlink" title="callHook(vm, ‘beforeCreate’)"></a>callHook(vm, ‘beforeCreate’)</h3><h3 id="initInjections-vm"><a href="#initInjections-vm" class="headerlink" title="initInjections(vm)"></a>initInjections(vm)</h3><h3 id="initState-vm"><a href="#initState-vm" class="headerlink" title="initState(vm)"></a>initState(vm)</h3><h3 id="initProvide-vm"><a href="#initProvide-vm" class="headerlink" title="initProvide(vm)"></a>initProvide(vm)</h3><h3 id="callHook-vm-‘created’"><a href="#callHook-vm-‘created’" class="headerlink" title="callHook(vm, ‘created’)"></a>callHook(vm, ‘created’)</h3>]]></content>
+  </entry>
+  <entry>
     <title>vueSoundCode-keepalive</title>
     <url>/2020/06/27/vueSoundCode-keepalive/</url>
     <content><![CDATA[<h1 id="vue源码解读系列-keepalive"><a href="#vue源码解读系列-keepalive" class="headerlink" title="vue源码解读系列-keepalive"></a>vue源码解读系列-keepalive</h1><h2 id="keepalive基本用法"><a href="#keepalive基本用法" class="headerlink" title="keepalive基本用法"></a>keepalive基本用法</h2><p>  <keep-alive> 包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们。和 <transition> 相似，<keep-alive> 是一个抽象组件：它自身不会渲染一个 DOM 元素，也不会出现在父组件链中。</keep-alive></transition></keep-alive></p>

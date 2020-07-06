@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    Hello World |  UniverZH
+    vueSoundCode-_init |  UniverZH
   </title>
   
   <link rel="shortcut icon" href="/favicon.ico">
@@ -29,7 +29,7 @@
   <div id="app">
     <main class="content">
       <section class="outer">
-  <article id="post-hello-world" class="article article-type-post" itemscope
+  <article id="post-vueSoundCode-init" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -37,7 +37,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Hello World
+  vueSoundCode-_init
 </h1>
   
 
@@ -46,8 +46,8 @@
 
     
     <div class="article-meta">
-      <a href="/2019/09/14/hello-world/" class="article-date">
-  <time datetime="2019-09-14T02:00:17.993Z" itemprop="datePublished">2019-09-14</time>
+      <a href="/2020/07/06/vueSoundCode-init/" class="article-date">
+  <time datetime="2020-07-06T12:40:55.000Z" itemprop="datePublished">2020-07-06</time>
 </a>
       
     </div>
@@ -70,26 +70,108 @@
       
 
       
-      <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+      <h1 id="vue源码解读系列-init函数"><a href="#vue源码解读系列-init函数" class="headerlink" title="vue源码解读系列-_init函数"></a>vue源码解读系列-_init函数</h1><p>  vue原型对象上的_init函数是vue的核心函数之一，它承担着创建一个新的vue实例的作用。<br>  那么当vue执行_init函数时主要执行了那些操作？下面尝试从其源码中找到答案。</p>
+<a id="more"></a>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a><a id="more"></a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<h2 id="initMixin函数"><a href="#initMixin函数" class="headerlink" title="initMixin函数"></a>initMixin函数</h2><p>  这个函数主要做了一件事，就是给vue原型对象定义了一个_init函数，而_init函数只接收一个选项参数options。_init函数主要做了以下事情:<br>  1.标记开始tag、<br>  2.判断当前实例是否是组件，如果是则初始化内部组件，若不是，则把构造器选项对象和当前实例选项对象合并、<br>  3.<strong>依序</strong>执行一系列初始化操作:初始化生命周期、事件、render函数、回调 beforeCreate钩子、injections、state、provide、回调 created钩子<br>  4.若存在el模板，就挂载模板</p>
+<p>  initMixin函数源码如下:<br>  (```)<br>  function initMixin (Vue) {<br>  Vue.prototype._init = function (options) {<br>    var vm = this;<br>    // a uid<br>    vm._uid = uid$1++;</p>
+<pre><code>var startTag, endTag;
+/* istanbul ignore if */
+if (&quot;development&quot; !== &apos;production&apos; &amp;&amp; config.performance &amp;&amp; mark) {
+  startTag = &quot;vue-perf-start:&quot; + (vm._uid);
+  endTag = &quot;vue-perf-end:&quot; + (vm._uid);
+  mark(startTag);
+}
 
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+// a flag to avoid this being observed
+vm._isVue = true;
+// merge options
+// 判断是否是组件
+if (options &amp;&amp; options._isComponent) {
+  // optimize internal component instantiation
+  // since dynamic options merging is pretty slow, and none of the
+  // internal component options needs special treatment.
+  /* 优化内部组件实例，因为动态组件非常慢，内部组件实例不需要特殊处理。*/
 
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+  &lt;!--初始化内部组件 把组件中的诸如parent，props，_parentListeners等赋值给当前的实例 --&gt;
+  initInternalComponent(vm, options);
+} else {
+  vm.$options = mergeOptions(
+    &lt;!--   返回一个构造器options对象，如果有父构造器且发生了改变则更新继承。其中对后期修改/附加的选项，
+    extend选项都有更新。 --&gt;
+    resolveConstructorOptions(vm.constructor),
+    options || {},
+    vm
+  );
+}
+/* istanbul ignore else */
+{
+  initProxy(vm);
+}
+// expose real self
+vm._self = vm;
+// 初始化生命周期
+initLifecycle(vm);
+// 初始化事件
+initEvents(vm);
+// 初始化render函数
+initRender(vm);
+// 回调 beforeCreate钩子
+callHook(vm, &apos;beforeCreate&apos;);
+// 在初始化data或者props前解析injections
+initInjections(vm); // resolve injections before data/props
+// 初始化state
+initState(vm);
+// 在data/props之后解析provide
+initProvide(vm); // resolve provide after data/props
+// 回调 created钩子
+callHook(vm, &apos;created&apos;);
 
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+/* istanbul ignore if */
+if (&quot;development&quot; !== &apos;production&apos; &amp;&amp; config.performance &amp;&amp; mark) {
+  vm._name = formatComponentName(vm, false);
+  mark(endTag);
+  measure((&quot;vue &quot; + (vm._name) + &quot; init&quot;), startTag, endTag);
+}
+/* 如果存在el模板，就挂载模板 */
+if (vm.$options.el) {
+  vm.$mount(vm.$options.el);
+}</code></pre><p>  };<br>}<br>  (```)</p>
+<hr>
+<p>  <strong><em>重要功能函数</em></strong></p>
+<h3 id="initLifecycle-vm"><a href="#initLifecycle-vm" class="headerlink" title="initLifecycle(vm)"></a>initLifecycle(vm)</h3><p>  初始化生命周期，向上寻找第一个满足abstract为真且存在其parent的父实例，同时声明一些变量。代码如下:<br>(```)<br>    function initLifecycle (vm) {<br>    var options = vm.$options;</p>
+<pre><code>// locate first non-abstract parent
+// 定位vm最近一个parent
+var parent = options.parent;
+// parent存在且VM自身也是非抽象的，一直向上追溯到parent的abstract为真且存在其parent，这时把它的parent
+// 当做vm的parent。并在其$children中存入vm
+if (parent &amp;&amp; !options.abstract) {
+    while (parent.$options.abstract &amp;&amp; parent.$parent) {
+    parent = parent.$parent;
+    }
+    parent.$children.push(vm);
+}
+/* 声明一些必须变量 */
+vm.$parent = parent;
+vm.$root = parent ? parent.$root : vm;
 
+vm.$children = [];
+vm.$refs = {};
+
+vm._watcher = null;
+vm._inactive = null;
+vm._directInactive = false;
+vm._isMounted = false;
+vm._isDestroyed = false;
+vm._isBeingDestroyed = false;
+}</code></pre><p>(```)</p>
+<h3 id="initEvents-vm"><a href="#initEvents-vm" class="headerlink" title="initEvents(vm)"></a>initEvents(vm)</h3><h3 id="initRender-vm"><a href="#initRender-vm" class="headerlink" title="initRender(vm)"></a>initRender(vm)</h3><h3 id="callHook-vm-‘beforeCreate’"><a href="#callHook-vm-‘beforeCreate’" class="headerlink" title="callHook(vm, ‘beforeCreate’)"></a>callHook(vm, ‘beforeCreate’)</h3><h3 id="initInjections-vm"><a href="#initInjections-vm" class="headerlink" title="initInjections(vm)"></a>initInjections(vm)</h3><h3 id="initState-vm"><a href="#initState-vm" class="headerlink" title="initState(vm)"></a>initState(vm)</h3><h3 id="initProvide-vm"><a href="#initProvide-vm" class="headerlink" title="initProvide(vm)"></a>initProvide(vm)</h3><h3 id="callHook-vm-‘created’"><a href="#callHook-vm-‘created’" class="headerlink" title="callHook(vm, ‘created’)"></a>callHook(vm, ‘created’)</h3>
       
       <!-- 打赏 -->
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/14/hello-world/" data-id="ckcajmoms0005qcu9moaeuo5d"
+      <a data-url="http://yoursite.com/2020/07/06/vueSoundCode-init/" data-id="ckcajmonc0008qcu9mei3jktd"
         class="article-share-link">分享</a>
       
     </footer>
@@ -100,15 +182,11 @@
   
   <nav class="article-nav">
     
-      <a href="/2020/06/08/JSseries-prototype/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            JSseries_prototype
-          
-        </div>
-      </a>
     
+      <a href="/2020/06/27/vueSoundCode-keepalive/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">vueSoundCode-keepalive</div>
+      </a>
     
   </nav>
 
