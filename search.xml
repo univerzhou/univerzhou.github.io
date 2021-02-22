@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>interview_summary</title>
+    <url>/2021/02/22/interview-summary/</url>
+    <content><![CDATA[<h1 id="面试题总结"><a href="#面试题总结" class="headerlink" title="面试题总结"></a>面试题总结</h1><h4 id="题目顺序为每天随机顺列，不分先后重要与否"><a href="#题目顺序为每天随机顺列，不分先后重要与否" class="headerlink" title="题目顺序为每天随机顺列，不分先后重要与否"></a>题目顺序为每天随机顺列，不分先后重要与否</h4><h2 id="题目总结规则为：具体某一道或者某一类面试题目原题，参考答案和答案中的拓展知识、链接也会一并收录"><a href="#题目总结规则为：具体某一道或者某一类面试题目原题，参考答案和答案中的拓展知识、链接也会一并收录" class="headerlink" title="题目总结规则为：具体某一道或者某一类面试题目原题，参考答案和答案中的拓展知识、链接也会一并收录"></a>题目总结规则为：具体某一道或者某一类面试题目原题，参考答案和答案中的拓展知识、链接也会一并收录</h2><a id="more"></a>
+
+<h2 id="题目："><a href="#题目：" class="headerlink" title="题目："></a>题目：</h2><h3 id="1-”说一下从url输入到返回请求的过程”"><a href="#1-”说一下从url输入到返回请求的过程”" class="headerlink" title="1.”说一下从url输入到返回请求的过程”"></a>1.”说一下从url输入到返回请求的过程”</h3><p><a href="https://juejin.cn/post/6928677404332425223" target="_blank" rel="noopener">参考链接:</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>axiosSourceAnalysis</title>
     <url>/2020/07/08/axiosSourceAnalysis/</url>
     <content><![CDATA[<h1 id="axios源码分析与理解"><a href="#axios源码分析与理解" class="headerlink" title="axios源码分析与理解"></a>axios源码分析与理解</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>  axios是一个基于promise的http库，可以用在浏览器和node.js中。<br>  具有如下特性:<br>    从浏览器中创建 XMLHttpRequests<br>    从 node.js 创建 http 请求<br>    支持 Promise API<br>    拦截请求和响应<br>    转换请求数据和响应数据<br>    取消请求<br>    自动转换 JSON 数据<br>    客户端支持防御 XSRF</p>

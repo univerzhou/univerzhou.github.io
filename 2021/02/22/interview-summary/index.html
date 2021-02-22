@@ -10,7 +10,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>
-    JSseries-Econtext |  UniverZH
+    interview_summary |  UniverZH
   </title>
   
   <link rel="shortcut icon" href="/favicon.ico">
@@ -29,7 +29,7 @@
   <div id="app">
     <main class="content">
       <section class="outer">
-  <article id="post-JSseries-Econtext" class="article article-type-post" itemscope
+  <article id="post-interview-summary" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -37,7 +37,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  JSseries-Econtext
+  interview_summary
 </h1>
   
 
@@ -46,8 +46,8 @@
 
     
     <div class="article-meta">
-      <a href="/2020/06/10/JSseries-Econtext/" class="article-date">
-  <time datetime="2020-06-10T14:18:39.000Z" itemprop="datePublished">2020-06-10</time>
+      <a href="/2021/02/22/interview-summary/" class="article-date">
+  <time datetime="2021-02-22T14:10:37.000Z" itemprop="datePublished">2021-02-22</time>
 </a>
       
     </div>
@@ -70,20 +70,16 @@
       
 
       
-      <h1 id="JS基本概念系列–作用域"><a href="#JS基本概念系列–作用域" class="headerlink" title="JS基本概念系列–作用域"></a>JS基本概念系列–作用域</h1><h2 id="作用域的原理和介绍"><a href="#作用域的原理和介绍" class="headerlink" title="作用域的原理和介绍"></a>作用域的原理和介绍</h2><p>执行环境(Execution Context)是JavaScript中最为重要的概念，一般当进入一段代码或者一个函数中时，就标志着进入了某个执行环境。而且每个执行环境都包含有一个变量对象(variable object),该执行环境中的所有对象和函数都被囊括在里面。</p>
-<a id="more"></a>
-<p>每个函数也有着自己的执行环境，随着函数的调用，该函数的执行环境会被推入一个环境栈之中，当该函数被调用完毕，环境栈就会把它推出来，这个时候这个执行环境就会被销毁。函数的执行环境中把活动对象(activity object)当做变量对象。</p>
-<p>在一个被执行的执行环境中，变量对象存在一条作用域链(scope chain),当前的变量对象始终是该条作用域链的起点。同时作用域链只允许从当前执行环境向父执行环境搜索，直至到全局变量，不允许反向。这也是闭包能实现的原理之一。</p>
-<p>浏览器中，会把全局的执行环境视为Windows对象。当某个环境被销毁时，其内的变量对象也会被销毁。全局执行环境中的变量对象始终是作用域链的终点。</p>
-<h2 id="let块级作用域"><a href="#let块级作用域" class="headerlink" title="let块级作用域"></a>let块级作用域</h2><p>js中不存在块级作用域，由上可知只存在函数作用域或者全局作用域。而es6引入的let赋予了这一效果。而var声明会被自动添加到最近的作用域之中。</p>
-<h2 id="延长作用域链"><a href="#延长作用域链" class="headerlink" title="延长作用域链"></a>延长作用域链</h2><p>js中有两种方式可以延长作用域长度：with和try catch中的catch块。其中with()中的参数是某个变量对象，它会被添加到作用域链的前端。catch块会创建一个新的变量对象，把抛出的错误对象声明包含进去。</p>
+      <h1 id="面试题总结"><a href="#面试题总结" class="headerlink" title="面试题总结"></a>面试题总结</h1><h4 id="题目顺序为每天随机顺列，不分先后重要与否"><a href="#题目顺序为每天随机顺列，不分先后重要与否" class="headerlink" title="题目顺序为每天随机顺列，不分先后重要与否"></a>题目顺序为每天随机顺列，不分先后重要与否</h4><h2 id="题目总结规则为：具体某一道或者某一类面试题目原题，参考答案和答案中的拓展知识、链接也会一并收录"><a href="#题目总结规则为：具体某一道或者某一类面试题目原题，参考答案和答案中的拓展知识、链接也会一并收录" class="headerlink" title="题目总结规则为：具体某一道或者某一类面试题目原题，参考答案和答案中的拓展知识、链接也会一并收录"></a>题目总结规则为：具体某一道或者某一类面试题目原题，参考答案和答案中的拓展知识、链接也会一并收录</h2><a id="more"></a>
+
+<h2 id="题目："><a href="#题目：" class="headerlink" title="题目："></a>题目：</h2><h3 id="1-”说一下从url输入到返回请求的过程”"><a href="#1-”说一下从url输入到返回请求的过程”" class="headerlink" title="1.”说一下从url输入到返回请求的过程”"></a>1.”说一下从url输入到返回请求的过程”</h3><p><a href="https://juejin.cn/post/6928677404332425223" target="_blank" rel="noopener">参考链接:</a></p>
 
       
       <!-- 打赏 -->
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/10/JSseries-Econtext/" data-id="cklgo2cxs00000su9d8ibknq4"
+      <a data-url="http://yoursite.com/2021/02/22/interview-summary/" data-id="cklgo2cy800070su9vmof7ju5"
         class="article-share-link">分享</a>
       
     </footer>
@@ -94,19 +90,10 @@
   
   <nav class="article-nav">
     
-      <a href="/2020/06/16/JSseries-async/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            JSseries-async
-          
-        </div>
-      </a>
     
-    
-      <a href="/2020/06/08/JSseries-prototype/" class="article-nav-link">
+      <a href="/2020/07/08/axiosSourceAnalysis/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">JSseries_prototype</div>
+        <div class="article-nav-title">axiosSourceAnalysis</div>
       </a>
     
   </nav>
